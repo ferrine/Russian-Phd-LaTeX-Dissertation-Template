@@ -3,8 +3,8 @@
 %\providecommand*{\BibDash}{}                % В стилях ugost2008 отключаем использование тире как разделителя 
 \urlstyle{rm}                               % ссылки URL обычным шрифтом
 \ifdefmacro{\microtypesetup}{\microtypesetup{protrusion=false}}{} % не рекомендуется применять пакет микротипографики к автоматически генерируемому списку литературы
-
-\insertbibliofull                   % Подключаем Bib-базы
+\bibliography{biblio/cites}
+\bibliographystyle{BibTeXStyles/iclr2018workshop}
 \ifdefmacro{\microtypesetup}{\microtypesetup{protrusion=true}}{}
 \urlstyle{tt}                               % возвращаем установки шрифта ссылок URL
 %\hypersetup{ urlcolor={urlcolor} }          % Восстанавливаем цвет ссылок
