@@ -1,14 +1,14 @@
 all:
-	latexmk -pdf -pdflatex="xelatex %O %S" dissertation
+	latexmk -pdf -pdflatex="xelatex %O %S" thesis
 pdf:
-	latexmk -pdf -jobname=synopsis_pdf -silent  dissertation.tex
+	latexmk -pdf -jobname=synopsis_pdf -silent  thesis.tex
 draft:	
 	pdflatex -ini -jobname="draft-preamble" "&pdflatex draft-preamble.tex\dump"
 	latexmk -pdf -jobname=draft -silent --shell-escape draft.tex
 
 clean:
-	latexmk -C dissertation
-	rm -f dissertation.bbl
+	latexmk -C thesis
+	rm -f thesis.bbl
 
 distclean:
 	## Core latex/pdflatex auxiliary files:
