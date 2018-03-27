@@ -314,3 +314,18 @@
 \renewcommand{\psi}{\uppsi}
 \renewcommand{\omega}{\upomega}
 \newcommand{\Real}{\mathbb{R}}
+\newcommand{\E}[2][]{\mathbb{E}_{{#1}}{{#2}}}
+\newcommand{\Eb}[2][]{\mathbb{E}_{{#1}}{\left[{#2}\right]}}
+
+\newif\ifIncludeAuthorNotes
+% Comment the below line to remove notes from text
+\IncludeAuthorNotestrue
+
+\DeclareRobustCommand{\note}[1]{
+\ifIncludeAuthorNotes
+	% the below line skips are intentional and force comment to be on separate line
+
+	\textcolor{gray}{/* #1 */}
+
+\fi
+}
