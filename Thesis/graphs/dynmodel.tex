@@ -1,0 +1,23 @@
+\begin{align*}
+\mu_\text{is} &\sim p(\mu_\text{is}); \in \Real^k& \text{ожидаемая доходность в обучающем периоде}\\
+\mu_\text{oos} &\sim p(\mu_\text{oos});\in \Real^k&\text{ожидаемая доходность в тестовом периоде}\\
+\nu &\sim p(\nu);\in \Real^k&\text{ожидаемый логарифм дисперсии}\\
+\kappa &\sim p(\kappa);\in \Real& \text{ожидаемая статистика корреляции}\\
+\theta_\mathcal{GP} &\sim p(\theta_\mathcal{GP})&\text{параметры многомерного гауссовского процесса}\\
+\phi_\mathcal{GP} &\sim p(\phi_\mathcal{GP})&\\
+\psi_\mathcal{GP} &\sim p(\psi_\mathcal{GP})&\\
+\Delta\mu &\sim \mathcal{GP}(\theta_\mathcal{GP}); f:\Real \to \Real^k&\text{изменение доходности во времени}\\
+\Delta\nu &\sim \mathcal{GP}(\phi_\mathcal{GP}); f:\Real \to \Real^k&\text{изменение логарифма дисперсии во времени}\\
+\Delta\kappa &\sim \mathcal{GP}(\psi_\mathcal{GP}); f:\Real \to \Real&\text{изменение статистики корреляции во времени}\\
+\end{align*}
+\begin{align}
+\mu_t &= \begin{cases}
+\mu_\text{is} + \Delta\mu(t), t \in \text{\{обучающий период\}}\\
+\mu_\text{oos} + \Delta\mu(t), t \in \text{\{тестовый период\}}
+\end{cases}&\text{среднее доходностей в момент t}\nonumber\\
+\sigma^2_t &= \exp(\nu + \Delta\nu(t))& \text{дисперсия доходностей в момент t}\nonumber\\
+\rho_t &= \text{sigmoid}(\kappa + \Delta\kappa(t))&\text{корреляция доходностей в момент t}\nonumber\\
+\Sigma_t &= ((1-\rho_t)\mathbb{I} + \rho_t) \odot \sigma_t\sigma_t^\top&\text{ковариационная матрица в момент t}\nonumber\\
+R_t &\sim \mathcal{N}(\mu_t,\Sigma_t)& \text{наблюдаемые доходности в момент t}\label{eq:dyncorr}
+\end{align}
+где $k$ -- количество алгоритмов. Априорные распределения задаются исходя из природы данных и не могут быть указаны на этом этапе.
