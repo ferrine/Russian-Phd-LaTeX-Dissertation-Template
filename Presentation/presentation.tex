@@ -4,16 +4,23 @@
 \usepackage[english,russian]{babel}
 \usepackage{amssymb,amsfonts,amsmath,mathtext}
 \usepackage{cite,enumerate,float,indentfirst}
+\usepackage{makecell}
+\usepackage{graphicx}
+\graphicspath{{../images/}{images/}{../Thesis/images/}} 
+\usepackage{tikz}
+\usepackage{calc}
+\def\checkmark{\tikz\fill[scale=0.7](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;}
+\def\checkmarksmall{\tikz\fill[scale=0.5](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;}
+\newcommand{\cond}{\;|\;}
 
-\graphicspath{{../images/}{images/}} 
 
-
-
-% \usetheme[secheader]{Boadilla}
-% \usecolortheme{seahorse}
+%\usetheme[secheader]{Boadilla}
+%\usecolortheme{seahorse}
 
 \usetheme{Pittsburgh}
 \usecolortheme{whale}
+
+
 
 \beamertemplatenavigationsymbolsempty
 
@@ -40,7 +47,6 @@
 
 \newcommand{\itemi}{\item[\checkmark]}
 
-%\title{\small{Название презентации}}
 \title{\small{\thesisTitle}}
 \author{\small{%
 \emph{Выступающий:}~\thesisAuthorShort\\%
@@ -52,178 +58,217 @@
 \date{\small{\thesisCity, \thesisYear}}
 
 \begin{document}
-
 \maketitle
-
-\begin{frame}
-\frametitle{Цели и задачи}
+\begin{frame}{Актуальность}
+\textbf{Актуальность:}
 \begin{itemize}
-  \item \textbf{Предмет исследования:} 
-  \item \textbf{Исследуемые характеристики:} 
-  \item \textbf{Цель исследования:} 
-  \item \textbf{Актуальность:} 
+	\item Торговые алгоритмы -- альтернатива активам
+	\item Алгоритмы могут реагировать на шоки*
+	\item Портфель из торговых стратегий -- возможность лучшей диверсификации
+\end{itemize}
+* Обыграть рынок -- не цель, важно разнообразие
+\vspace{\baselineskip}
+
+\textbf{Предмет исследования} -- приложение портфельной теории для составления портфеля торговых стратегий.
+\end{frame}
+\begin{frame}{Цели и Задачи}
+
+\textbf{Проблемы:}
+\begin{itemize}
+	\item Алгоритмы $\ne$ Активы
+	\item Алгоритмов много (>700000), нужен отбор
+	\item Их составляют люди $\rightarrow$ <<переобучение>>
+	\item[$\blacktriangleright$] Много априорных знаний не про структуру
+\end{itemize}
+\vspace{\baselineskip}
+
+\textbf{Цель:} учесть априорные знания о доходностях алгоритмов при формировании портфеля торговых стратегий
+\end{frame}
+\begin{frame}{Цели и Задачи}
+\textbf{Задачи:}
+\begin{itemize}
+	\item Предложить модель динамики доходности ТС
+	\item Предложить способ составления портфеля
+	\item Провесит сравнительный анализ для разработанного метода
+\end{itemize}
+\visible<2>{
+\underline{\textbf{Структура работы}}
+\begin{itemize}
+	\item[>] Описание проблемы
+	\item[>] Обзор и адаптация существующих методов
+	\item[>] Эмпирическая часть, сравнительный анализ
+\end{itemize}
+}
+\end{frame}
+\begin{frame}{Особенности Алгоритмов}
+\textbf{Алгоритмы $\ne$ Активы}
+\begin{itemize}
+	\item Другая структура рисков
+	\item Комиссия за транзакции
+\end{itemize}
+\textbf{Происхождение алгоритмов}
+\begin{itemize}
+	\item Создаются авторами на спец. платформе
+	\item Авторы видят результаты <<бэктеста>>
+	\item Авторы конкурируют между собой
+	\item[$\blacktriangleright$] Точка перелома, <<проблема оракула>>
 \end{itemize}
 \end{frame}
-
-\begin{frame}
-\frametitle{Проблемы}
-\begin{itemize}
-  \item Проблема 1
-  \item Проблема 2
-  \item Проблема 3    
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\frametitle{План работ}
-\begin{enumerate}
-  \item \textbf{Задача 1}
-  \begin{itemize}
-    \item Подзадача 1-1
-    \item Подзадача 1-2
-  \end{itemize}
-  \item \textbf{Задача 2}
-  \begin{itemize}
-    \item Подзадача 2-1
-    \item Подзадача 2-2
-    \item Подзадача 2-3
-  \end{itemize}
-  \item \textbf{Задача 3}
-  \begin{itemize}
-    \item Подзадача 3-1
-    \item Подзадача 3-2
-    \item Подзадача 3-3
-  \end{itemize}
-\end{enumerate}
-\end{frame}
-
-\begin{frame}
-\frametitle{Список обыкновенный}
-\begin{itemize}
-  \item Пункт 1
-  \item Пункт 2
-  \item Пункт 3
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\frametitle{Одиночное изображение}
-\begin{figure}[H]
-  \center
-  \includegraphics[width=0.8\linewidth]{latex}
-\end{figure}
-\end{frame}
-
-\begin{frame}
-\frametitle{Формулы}
-$$
-\left\{
-  \begin{array}{rl}
-    \dot x = & \sigma (y-x) \\
-    \dot y = & x (r - z) - y \\
-    \dot z = & xy - bz
-  \end{array}
-\right.
-$$
-\end{frame}
-
-\begin{frame}
-\frametitle{Составное изображение}
-\begin{figure}[h]
-  \begin{minipage}[h]{0.49\linewidth}
-    \textbf{Составная \\ подпись 1}
-    \center{\includegraphics[width=1\linewidth]{knuth1}}
-  \end{minipage}
-  \hfill
-  \begin{minipage}[h]{0.49\linewidth}
-    \textbf{Составная \\ подпись 2}
-    \center{\includegraphics[width=1\linewidth]{knuth2}}
-  \end{minipage}
-\end{figure}
-\end{frame}
-
-\begin{frame}
-\frametitle{Таблица}
-\begin{tabular}{|l|l|}
-\hline
-\textbf{Заголовок 1} & \textbf{Заголовок 2} \\
-\hline
-Сумма & $b+a$ \\
-\hline
-Разность & $a-b$ \\
-\hline
-Произведение & $a*b$ \\
-\hline
+\begin{frame}{Байесовкий vs Частотный подход}
+\resizebox{\linewidth}{!}{
+\begin{tabular}{l|c|c}
+	& Байесовский  & Частотный \\ \hline
+	Вероятность & мера знания & частота события \\ \hline
+	\makecell{Параметры \\ модели}& случайные величины & неизвестные константы \\ \hline
+	Данные & \multicolumn{2}{c}{из неизвестного распределения}  \\ \hline
+	\makecell{Учет априорной \\ информации} & \qquad да \visible<2>{ \textcolor{green}{\checkmark}}& нет \\ \hline
+	Размер выборки & $\forall$ & $\gg0$
 \end{tabular}
+}
+\end{frame}
+\begin{frame}{Учёт предпосылок}
+\begin{itemize}
+	\item Точка перелома
+	\begin{itemize}
+		\item[>] Структурный сдвиг -- часть модели 
+	\end{itemize}
+	\item<2-> Доходности имеют непостоянную волатильность (Dumas et al., 1998)
+	\begin{itemize}
+		\item[>] Модели волатильности: GARCH, \textcolor<3->{green}{GPVol}
+	\end{itemize}
+	\item<4-> Динамика корреляций (Vaga, 1990)
+	\begin{itemize}
+		\item[>] Модели динамической корреляции: DCC, \textcolor<5->{green}{DECO}
+		\item<5->[>] Используем модификацию DECO
+		\item<6-|alert@6>[>]Верно ли для доходностей стратегий?
+	\end{itemize}
+\end{itemize}
+\end{frame}
+\begin{frame}{Спецификация модели}
+\textbf{Гауссовские процессы}
+
+\begin{minipage}{.5\linewidth}
+\begin{itemize}
+	\item[+] Гибкость модели
+	\item[+] Интерпретируемые параметры
+	\item[+] Позволяют учесть априорные знания
+\end{itemize}
+\end{minipage}
+\begin{minipage}{.48\linewidth}
+	\includegraphics[width=\linewidth]{sampleGP}
+\end{minipage}
+\end{frame}
+\begin{frame}{Спецификация модели}
+\textbf{Ключевые идеи:}
+\begin{itemize}
+	\item Доходности $r_t$ $\sim$ Гауссовский Процесс + шум
+	\begin{itemize}
+		\item[\checkmarksmall] среднее ГП -- средняя доходность
+		
+		(о ней много знаем)
+	\end{itemize}
+	\item<2-> Волатильность $\sigma_t$ $\sim$ Гауссовский Процесс
+	\begin{enumerate}
+		\item[\checkmarksmall] Идеи GPVol
+	\end{enumerate}
+	\item<3-> Корреляции?
+	\begin{enumerate}
+		\item Динамические $\rightarrow$ модификация DECO с ГП
+		\item Статические $\rightarrow$ $r_t \sim \mathcal{N}(\mu_t, LL^\top\odot\sigma_t\sigma_t^\top)$
+		\item Без корреляций $\rightarrow$ $r_t \sim \mathcal{N}(\mu_t, diag(\sigma_t))$
+	\end{enumerate}
+	\item<4-> Структурный сдвиг
+	\begin{itemize}
+		\item[\checkmarksmall] только для средних доходностей
+	\end{itemize}
+\end{itemize}
+\end{frame}
+\begin{frame}{Оптимизация портфеля}
+\textbf{Метод Монте Карло}
+
+\begin{minipage}{0.49\linewidth}
+	\begin{itemize}
+		\item Оцениваем модель
+		\item Делаем симуляции доходностей
+		\item Оптимизируем матожидание функции полезности инвестора
+	\end{itemize}
+\end{minipage}
+\begin{minipage}{0.49\linewidth}
+	\includegraphics[width=\linewidth]{isoelastic}
+	
+	График: Полезность инвестора
+\end{minipage}
+\end{frame}
+\begin{frame}{Оценка байесовской модели}
+\textbf{Hamiltonian Monte Carlo}
+\begin{tabular}{lr}
+\includegraphics[height=2.5em]{pymc3}
+&\makecell{\vspace{1.5em}
+$\small p(\Theta\cond\mathcal{D}) =
+\frac
+{p(\mathcal{D}\cond\Theta)p(\Theta)}
+{\color{red}{p(\mathcal{D})}}$}
+\end{tabular}
+
+\begin{minipage}{.5\linewidth}
+	\begin{itemize}
+		\item[+] Сэмплирование из сложных распределений
+		\item[+] Хорошие условия сходимости
+		\item[\checkmarksmall] Требуется непрерывность параметров
+	\end{itemize}
+\end{minipage}
+\begin{minipage}{.48\linewidth}
+	\includegraphics[width=\linewidth]{sampleHMC}
+\end{minipage}
 \end{frame}
 
-\begin{frame}
-\frametitle{Большой многоуровневый список}
+\begin{frame}{Данные}
+Данные были предоставлены компанией \textbf{Quantopian}\footnote{\vspace{.5em}В рамках стажировки}
 \begin{itemize}
-  \item \textbf{Пункт 1}
-    \begin{itemize}
-      \itemi Подпункт 1-1
-      \itemi Подпункт 1-2
-    \end{itemize}
-  \item \textbf{Пункт 2}
-    \begin{itemize}
-      \itemi Подпункт 2-1
-    \end{itemize}
-  \item \textbf{Пункт 3}
-    \begin{itemize}
-      \itemi Подпункт 3-1
-      \itemi Подпункт 3-2
-    \end{itemize}
-  \item \textbf{Пункт 4}
-    \begin{itemize}
-      \itemi Подпункт 4-1
-    \end{itemize}
-  \item \textbf{Пункт 5}
-    \begin{itemize}
-      \itemi Подпункт 5-1
-      \itemi Подпункт 5-2
-      \itemi Подпункт 5-3
-    \end{itemize}
+	\item Всего 700000+ алгоритмов за период 4 года
+	\item Существует внутренняя система отбора стабильных алгоритмов
+	\item Таких получается около 0.05\%
+	\item Для исследования предоставлены 150 из них
 \end{itemize}
 \end{frame}
 
-\begin{frame}
-\frametitle{Четыре изображения}
-\begin{figure}[H]
-  \center
-    \includegraphics[width=0.4\linewidth]{latex}
-    \includegraphics[width=0.4\linewidth]{latex}\\
-    \includegraphics[width=0.4\linewidth]{latex}
-    \includegraphics[width=0.4\linewidth]{latex}
-\end{figure}
-\end{frame}
+\begin{frame}{Проверка гипотез}
+\textbf{Стохастическая волатильность}
+\includegraphics[width=\linewidth]{returns-all}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}
-\frametitle{Перспективы развития проекта}
+График: Распределение доходностей \textit{Всех} алгоритмов во времени
 \begin{itemize}
-  \item Перспектива 1
-  \item Перспектива 2
-  \item Перспектива 3
-  \item Перспектива 4
-  \item Перспектива 5
+	\item Наблюдается эффект стохастической волатильности
 \end{itemize}
 \end{frame}
 
-\begin{frame}
-\frametitle{Результаты работы}
+\begin{frame}{Проверка гипотез}
+\textbf{Динамика корреляций}
+\includegraphics[width=\linewidth]{correlations}
+
+График: Траектории скользящих корреляций доходностей алгоритмов
 \begin{itemize}
-  \item Результат 1
-  \item Результат 2
-  \item Результат 3
-  \item Результат 4
+	\item Корреляции довольно стабильны во времени
 \end{itemize}
 \end{frame}
+\begin{frame}{Проверка гипотез}
+\begin{itemize}
+	\item Наблюдается эффект стохастической волатильности
+	\item Корреляции довольно стабильны во времени
+\end{itemize}
+Подходят только спецификации со статическими корреляциями.
 
-\begin{frame}
-\begin{center}
-Спасибо за внимание!
-\end{center}
 \end{frame}
-
-\end{document} 
+\begin{frame}{Сравнительный анализ (бутстрэп)}
+\includegraphics[width=.7\linewidth]{performance}
+	
+График: Сравнение коэффициента Шарпа полученного с использованием разных моделей для составления оптимального портфеля
+\end{frame}
+\begin{frame}{Заключение}
+\begin{itemize}
+	\item Предложен устойчивый подход к составлению портфеля торговых стратегий
+	\item Предложена модификация базовых методов
+	\item Реализован продукт успешно решающий прикладную задачу
+\end{itemize}
+\end{frame}
+\end{document}
