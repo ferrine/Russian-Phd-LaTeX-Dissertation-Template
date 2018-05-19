@@ -1,8 +1,8 @@
-\documentclass[14pt]{beamer}
+\documentclass[12pt]{beamer}
 \usepackage[T2A]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[english,russian]{babel}
-\usepackage{amssymb,amsfonts,amsmath,mathtext}
+\usepackage{amssymb,amsfonts,amsmath,mathtext, wasysym}
 \usepackage{cite,enumerate,float,indentfirst}
 \usepackage{makecell}
 \usepackage{graphicx}
@@ -12,13 +12,37 @@
 \def\checkmark{\tikz\fill[scale=0.7](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;}
 \def\checkmarksmall{\tikz\fill[scale=0.5](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;}
 \newcommand{\cond}{\;|\;}
-
-
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 %\usetheme[secheader]{Boadilla}
 %\usecolortheme{seahorse}
 
-\usetheme{Pittsburgh}
+\usetheme{Madrid}
 \usecolortheme{whale}
+
+\makeatletter
+\long\def\beamer@author[#1]#2{%
+	\def\insertauthor{\def\inst{\beamer@insttitle}\def\and{\beamer@andtitle}%
+		\begin{minipage}{\linewidth}#2\end{minipage}}%
+	\def\beamer@shortauthor{#1}%
+	\ifbeamer@autopdfinfo%
+	\def\beamer@andstripped{}%
+	\beamer@stripands#1 \and\relax
+	{\let\inst=\@gobble\let\thanks=\@gobble\def\and{, }\hypersetup{pdfauthor={\beamer@andstripped}}}
+	\fi%
+}
+\makeatother
+\author[Кочуров М.В.]{%
+	\begin{center}
+		\large{Кочуров Максим}
+	\end{center}
+\vspace{2\baselineskip}
+	\begin{flushright}
+		Научный руководитель:\\
+		доцент, к.э.н. Лукаш Е.Н.
+	\end{flushright}%
+}
 
 
 
@@ -27,35 +51,11 @@
 \newcommand{\todo}{\alert}
 \input{../common/data.tex}      % Основные сведения
 
-\setbeamercolor{footline}{fg=blue}
-\setbeamertemplate{footline}{
-  \leavevmode%
-  \hbox{%
-  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{}%
-    % И. О. Фамилия, Организация кратко
-    \thesisAuthorShort, \thesisOrganizationShort
-  \end{beamercolorbox}%
-  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{}%
-    % Город, 20XX
-    \thesisCity, \thesisYear
-  \end{beamercolorbox}%
-  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{}%
-  Стр. \insertframenumber{} из \inserttotalframenumber \hspace*{2ex}
-  \end{beamercolorbox}}%
-  \vskip0pt%
-}
-
 \newcommand{\itemi}{\item[\checkmark]}
 
-\title{\small{\thesisTitle}}
-\author{\small{%
-\emph{Выступающий:}~\thesisAuthorShort\\%
-\emph{Руководитель:}~\supervisorRegaliaShort~\supervisorFioShort}\\%
-\vspace{30pt}%
-\thesisOrganization%
-\vspace{20pt}%
-}
-\date{\small{\thesisCity, \thesisYear}}
+\title[Моделирование динамики]{\thesisTitle}
+\institute[МГУ]{\vspace{-\baselineskip}\normalsize\thesisOrganizationShort}
+\date{\thesisCity, \thesisYear}
 
 \begin{document}
 \maketitle
@@ -63,22 +63,20 @@
 \textbf{Актуальность:}
 \begin{itemize}
 	\item Торговые алгоритмы -- альтернатива активам
-	\item Алгоритмы могут реагировать на шоки*
 	\item Портфель из торговых стратегий -- возможность лучшей диверсификации
+	\item Существует интерес в индустрии к поставлению портфеля из ТС
+	\item Отсутствуют исследования на эту тему
 \end{itemize}
-* Обыграть рынок -- не цель, важно разнообразие
-\vspace{\baselineskip}
-
-\textbf{Предмет исследования} -- приложение портфельной теории для составления портфеля торговых стратегий.
+Исследование актуально и востребовано
 \end{frame}
-\begin{frame}{Цели и Задачи}
+\begin{frame}{Цель}
 
 \textbf{Проблемы:}
 \begin{itemize}
 	\item Алгоритмы $\ne$ Активы
 	\item Алгоритмов много (>700000), нужен отбор
-	\item Их составляют люди $\rightarrow$ <<переобучение>>
-	\item[$\blacktriangleright$] Много априорных знаний не про структуру
+	\item Стратегии составляют люди \\$\rightarrow$ <<проблема оракула>>
+	\item[$\blacktriangleright$] Много априорных знаний о распределении доходностях торговых стратегий
 \end{itemize}
 \vspace{\baselineskip}
 
@@ -87,50 +85,30 @@
 \begin{frame}{Цели и Задачи}
 \textbf{Задачи:}
 \begin{itemize}
-	\item Предложить модель динамики доходности ТС
-	\item Предложить способ составления портфеля
-	\item Провесит сравнительный анализ для разработанного метода
-\end{itemize}
-\visible<2>{
-\underline{\textbf{Структура работы}}
-\begin{itemize}
-	\item[>] Описание проблемы
-	\item[>] Обзор и адаптация существующих методов
-	\item[>] Эмпирическая часть, сравнительный анализ
-\end{itemize}
-}
-\end{frame}
-\begin{frame}{Особенности Алгоритмов}
-\textbf{Алгоритмы $\ne$ Активы}
-\begin{itemize}
-	\item Другая структура рисков
-	\item Комиссия за транзакции
-\end{itemize}
-\textbf{Происхождение алгоритмов}
-\begin{itemize}
-	\item Создаются авторами на спец. платформе
-	\item Авторы видят результаты <<бэктеста>>
-	\item Авторы конкурируют между собой
-	\item[$\blacktriangleright$] Точка перелома, <<проблема оракула>>
+	\item Предложить модель динамики доходности ТС и способ ее оценки
+	\item Предложить метод составления портфеля
+	\item Оценить модель на реальных данных
+	\item Выяснить практическую значимость разработанного метода составления портфеля
 \end{itemize}
 \end{frame}
-\begin{frame}{Байесовкий vs Частотный подход}
-\resizebox{\linewidth}{!}{
-\begin{tabular}{l|c|c}
-	& Байесовский  & Частотный \\ \hline
-	Вероятность & мера знания & частота события \\ \hline
-	\makecell{Параметры \\ модели}& случайные величины & неизвестные константы \\ \hline
-	Данные & \multicolumn{2}{c}{из неизвестного распределения}  \\ \hline
-	\makecell{Учет априорной \\ информации} & \qquad да \visible<2>{ \textcolor{green}{\checkmark}}& нет \\ \hline
-	Размер выборки & $\forall$ & $\gg0$
-\end{tabular}
-}
+\begin{frame}{Преимущества байесовского подхода}
+\begin{minipage}{0.6\linewidth}
+	\begin{itemize}
+		\item Учет экспертных знаний
+		\item Интерпретируемость
+		\item Гибкость моделирования
+		\item Учет неуверенности в значениях параметров
+	\end{itemize}
+\end{minipage}
+\begin{minipage}{0.38\linewidth}
+	\includegraphics[width=\linewidth]{bayes}
+\end{minipage}
 \end{frame}
 \begin{frame}{Учёт предпосылок}
 \begin{itemize}
-	\item Точка перелома
+	\item Точка перелома распределения доходностей
 	\begin{itemize}
-		\item[>] Структурный сдвиг -- часть модели 
+		\item[>] Структурный сдвиг -- часть модели
 	\end{itemize}
 	\item<2-> Доходности имеют непостоянную волатильность (Dumas et al., 1998)
 	\begin{itemize}
@@ -143,23 +121,30 @@
 		\item<6-|alert@6>[>]Верно ли для доходностей стратегий?
 	\end{itemize}
 \end{itemize}
-\end{frame}
-\begin{frame}{Спецификация модели}
-\textbf{Гауссовские процессы}
+\begin{overlayarea}{\textwidth}{5cm} %\myheight is the quantity to be determined
+\small
+\begin{block}<2->{Преимущества и недостатки}
+	\only<2-3>{
+		\begin{tabular}{L{.5\linewidth}|L{.5\linewidth}}
+			\textbf{GARCH} & \textbf{GPVol}\\
+			($-$) сложность с байесовским подходом & ($+$) богаче GARCH\\
+			& ($+$) проста в использовании
+		\end{tabular}
+	}
+	\only<4->{
+		\begin{tabular}{L{.5\linewidth}|L{.5\linewidth}}
+			\textbf{DCC} & \textbf{DECO}\\
+			($+$) полная динамика & ($-$) неполная динамика\\
+			($-$) не масштабируется & ($+$) масштабируема\\
+			 & ($-$) требуется модификация
+		\end{tabular}
+	}
+\end{block}	
+\end{overlayarea}
 
-\begin{minipage}{.5\linewidth}
-\begin{itemize}
-	\item[+] Гибкость модели
-	\item[+] Интерпретируемые параметры
-	\item[+] Позволяют учесть априорные знания
-\end{itemize}
-\end{minipage}
-\begin{minipage}{.48\linewidth}
-	\includegraphics[width=\linewidth]{sampleGP}
-\end{minipage}
 \end{frame}
 \begin{frame}{Спецификация модели}
-\textbf{Ключевые идеи:}
+\textbf{Ключевые компоненты:}
 \begin{itemize}
 	\item Доходности $r_t$ $\sim$ Гауссовский Процесс + шум
 	\begin{itemize}
@@ -171,7 +156,7 @@
 	\begin{enumerate}
 		\item[\checkmarksmall] Идеи GPVol
 	\end{enumerate}
-	\item<3-> Корреляции?
+	\item<3-> Корреляции доходностей ТС?
 	\begin{enumerate}
 		\item Динамические $\rightarrow$ модификация DECO с ГП
 		\item Статические 
@@ -182,21 +167,32 @@
 		\item[\checkmarksmall] только для средних доходностей
 	\end{itemize}
 \end{itemize}
+\begin{overlayarea}{\textwidth}{5cm}
+\only<1>{
+	\smiley\ Гауссовский процесс имеет интерпретируемые параметры, позволяет учесть априорные знания
+}
+\only<2>{
+	\smiley\ Учитываем непостоянную волатильность гауссовским процессом
+}
+\only<3>{
+	Для корреляций доходностей несколько вариантов модели, нет работ анализирующих их динамику
+}
+\end{overlayarea}
 \end{frame}
 \begin{frame}{Оптимизация портфеля}
 \textbf{Метод Монте Карло}
 
 \begin{minipage}{0.49\linewidth}
-	\begin{itemize}
+	\begin{enumerate}
 		\item Оцениваем модель
 		\item Делаем симуляции доходностей
 		\item Оптимизируем матожидание функции полезности инвестора
-	\end{itemize}
+	\end{enumerate}
 \end{minipage}
 \begin{minipage}{0.49\linewidth}
 	\includegraphics[width=\linewidth]{isoelastic}
 	
-	График: Полезность инвестора
+	Полезность инвестора
 \end{minipage}
 \end{frame}
 \begin{frame}{Оценка байесовской модели}
@@ -223,46 +219,19 @@ $\small p(\Theta\cond\mathcal{D}) =
 \end{frame}
 
 \begin{frame}{Данные}
-Данные были предоставлены компанией \textbf{Quantopian}\footnote{\vspace{.5em}В рамках стажировки}
+Данные были предоставлены компанией \textbf{Quantopian}
 \begin{itemize}
 	\item Всего 700000+ алгоритмов за период 4 года
 	\item Существует внутренняя система отбора стабильных алгоритмов
-	\item Таких получается около 0.05\%
-	\item Для исследования предоставлены 150 из них
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Проверка гипотез}
-\textbf{Стохастическая волатильность}
-\includegraphics[width=\linewidth]{returns-all}
-
-График: Распределение доходностей \textit{Всех} алгоритмов во времени
-\begin{itemize}
-	\item Наблюдается эффект стохастической волатильности
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Проверка гипотез}
-\textbf{Динамика корреляций}
-\includegraphics[width=\linewidth]{correlations}
-
-График: Траектории скользящих корреляций доходностей алгоритмов
-\begin{itemize}
-	\item Корреляции довольно стабильны во времени
-\end{itemize}
-\end{frame}
-\begin{frame}{Проверка гипотез}
-\begin{itemize}
 	\item Наблюдается эффект стохастической волатильности
 	\item Корреляции довольно стабильны во времени
 \end{itemize}
-Подходят только спецификации со статическими корреляциями.
-
+Подходят только спецификации со статическими корреляциями
 \end{frame}
-\begin{frame}{Сравнительный анализ (бутстрэп)}
-\includegraphics[width=.7\linewidth]{performance}
-	
-График: Сравнение коэффициента Шарпа полученного с использованием разных моделей для составления оптимального портфеля
+
+\begin{frame}{Сравнительный анализ}
+\textbf{Бутстрап распределение коэфф. Шарпа (отложенный период)}
+\includegraphics[width=\linewidth]{performance-rus}
 \end{frame}
 \begin{frame}{Заключение}
 \begin{itemize}
