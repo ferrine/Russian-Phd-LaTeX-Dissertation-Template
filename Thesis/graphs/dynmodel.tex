@@ -16,7 +16,7 @@
 \mu_\text{oos} + \Delta\mu(t), t \in \text{\{тестовый период\}}
 \end{cases}&\text{среднее доходностей в момент t}\nonumber\\
 \sigma^2_t &= \exp(\nu + \Delta\nu(t))& \text{дисперсия доходностей в момент t}\nonumber\\
-\rho_t &= \text{sigmoid}(\kappa + \Delta\kappa(t))&\text{корреляция доходностей в момент t}\nonumber\\
+\rho_t &= \tfrac{k}{k-1}(\text{sigmoid}(\kappa + \Delta\kappa(t))-\tfrac{1}{k-1})&\text{корреляция доходностей в момент t}\nonumber\\
 \Sigma_t &= ((1-\rho_t)\mathbb{I} + \rho_t) \odot \sigma_t\sigma_t^\top&\text{ковариационная матрица в момент t}\nonumber\\
 R_t &\sim \mathcal{N}(\mu_t,\Sigma_t)& \text{наблюдаемые доходности в момент t}\label{eq:dyncorr}
 \end{align}
