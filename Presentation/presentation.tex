@@ -20,6 +20,8 @@
 
 \usetheme{Madrid}
 \usecolortheme{whale}
+\setbeamertemplate{enumerate items}[circle]
+\setbeamertemplate{itemize items}[circle]
 
 \makeatletter
 \long\def\beamer@author[#1]#2{%
@@ -37,7 +39,7 @@
 	\begin{center}
 		\large{Кочуров Максим}
 	\end{center}
-\vspace{2\baselineskip}
+\vspace{1\baselineskip}
 	\begin{flushright}
 		Научный руководитель:\\
 		доцент, к.э.н. Лукаш Е.Н.
@@ -51,45 +53,54 @@
 \newcommand{\todo}{\alert}
 \input{../common/data.tex}      % Основные сведения
 
-\newcommand{\itemi}{\item[\checkmark]}
 
 \title[Моделирование динамики]{\thesisTitle}
-\institute[МГУ]{\vspace{-\baselineskip}\normalsize\thesisOrganizationShort}
-\date{\thesisCity, \thesisYear}
+\institute[МГУ]{\small
+	Экономический Факультет\\
+	МГУ им. М.В.Ломоносова}
+\date[23 мая 2018]{\small Москва, 23 мая 2018}
 
 \begin{document}
 \maketitle
 \begin{frame}{Актуальность}
-\textbf{Актуальность:}
-\begin{itemize}
-	\item Торговые алгоритмы -- альтернатива активам
-	\item Портфель из торговых стратегий -- возможность лучшей диверсификации
-	\item Существует интерес в индустрии к поставлению портфеля из ТС
-	\item Отсутствуют исследования на эту тему
-\end{itemize}
-Исследование актуально и востребовано
+\begin{enumerate}
+	\item Существует возрастающий интерес к составлению портфеля торговых стратегий
+	\item Есть ряд проблем, которые мешают применению стандартной теории
+	\item Исследования, решающие эти проблемы, отсутствуют
+\end{enumerate}
+\begin{overlayarea}{\linewidth}{4cm}
+	\only<1>{%
+		\begin{block}{Возрастающий интерес}
+			Новые хеджфоды агрегируют торговые стратегии для дальнейшего использования:
+			\begin{itemize}
+				\item \href{https://www.quantopian.com}{Quantopian} (Boston, USA)
+				\item \href{https://www.worldquant.com}{World Quant} (New York, USA)
+			\end{itemize}
+		\end{block}
+	}
+	\only<2>{%
+		\begin{block}{Основные проблемы}
+		\begin{itemize}
+			\item Огромная база алгоритмов, сравнительно короткие ряды
+			\item Алгоритмы составляют люди: распределение доходностей до~и~после создания -- разные вещи
+			\item Стандартные предпосылки о стохастической волатильности, возможной динамики корреляций
+		\end{itemize}
+	\end{block}
+	}
+\end{overlayarea}
 \end{frame}
-\begin{frame}{Цель}
 
-\textbf{Проблемы:}
-\begin{itemize}
-	\item Алгоритмы $\ne$ Активы
-	\item Алгоритмов много (>700000), нужен отбор
-	\item Стратегии составляют люди \\$\rightarrow$ <<проблема оракула>>
-	\item[$\blacktriangleright$] Много априорных знаний о распределении доходностях торговых стратегий
-\end{itemize}
-\vspace{\baselineskip}
-
+\begin{frame}{Цель и Задачи}
 \textbf{Цель:} учесть априорные знания о доходностях алгоритмов при формировании портфеля торговых стратегий
-\end{frame}
-\begin{frame}{Цели и Задачи}
+
 \textbf{Задачи:}
-\begin{itemize}
-	\item Предложить модель динамики доходности ТС и способ ее оценки
-	\item Предложить метод составления портфеля
-	\item Оценить модель на реальных данных
-	\item Выяснить практическую значимость разработанного метода составления портфеля
-\end{itemize}
+\begin{enumerate}
+	\item Сформировать общую схему моделирования динамики торговых стратегий
+	\item Предложить конкретные спецификации модели динамики доходностей
+	\item Предложить метод оценки модели, реализовать его в виде программного продукта
+	\item На реальных данных выбрать адекватную спецификацию и оценить ее
+	\item Сравнить разработанную процедуру с существующей, используемой на практике
+\end{enumerate}
 \end{frame}
 \begin{frame}{Преимущества байесовского подхода}
 \begin{minipage}{0.6\linewidth}
@@ -110,32 +121,32 @@
 	\begin{itemize}
 		\item[>] Структурный сдвиг -- часть модели
 	\end{itemize}
-	\item<2-> Доходности имеют непостоянную волатильность (Dumas et al., 1998)
+	\item<2-> Доходности имеют непостоянную волатильность
 	\begin{itemize}
-		\item[>] Модели волатильности: GARCH, \textcolor<3->{green}{GPVol}
+		\item[>] Модели волатильности: GARCH, \textbf<3->{GPVol}
 	\end{itemize}
-	\item<4-> Динамика корреляций (Vaga, 1990)
+	\item<3-> Динамика корреляций
 	\begin{itemize}
-		\item[>] Модели динамической корреляции: DCC, \textcolor<5->{green}{DECO}
-		\item<5->[>] Используем модификацию DECO
-		\item<6-|alert@6>[>]Верно ли для доходностей стратегий?
+		\item[>] Модели динамической корреляции: DCC, \textbf<4->{DECO}
+		\item<4->[>] Используем модификацию DECO
+		\item<5-|alert@5>[>]Верно ли для доходностей стратегий?
 	\end{itemize}
 \end{itemize}
-\begin{overlayarea}{\textwidth}{5cm} %\myheight is the quantity to be determined
+\begin{overlayarea}{\textwidth}{5cm}%
 \small
 \begin{block}<2->{Преимущества и недостатки}
-	\only<2-3>{
+	\only<2>{
 		\begin{tabular}{L{.5\linewidth}|L{.5\linewidth}}
 			\textbf{GARCH} & \textbf{GPVol}\\
 			($-$) сложность с байесовским подходом & ($+$) богаче GARCH\\
 			& ($+$) проста в использовании
 		\end{tabular}
 	}
-	\only<4->{
+	\only<3->{
 		\begin{tabular}{L{.5\linewidth}|L{.5\linewidth}}
 			\textbf{DCC} & \textbf{DECO}\\
 			($+$) полная динамика & ($-$) неполная динамика\\
-			($-$) не масштабируется & ($+$) масштабируема\\
+			($-$) не масштабируется & ($+$) масштабируется\\
 			 & ($-$) требуется модификация
 		\end{tabular}
 	}
@@ -167,15 +178,27 @@
 		\item[\checkmarksmall] только для средних доходностей
 	\end{itemize}
 \end{itemize}
-\begin{overlayarea}{\textwidth}{5cm}
-\only<1>{
-	\smiley\ Гауссовский процесс имеет интерпретируемые параметры, позволяет учесть априорные знания
+\vspace{-.8\baselineskip}
+\begin{overlayarea}{\textwidth}{4cm}
+\only<1>{%
+	\begin{block}{}
+Гауссовский процесс имеет интерпретируемые параметры, позволяет учесть априорные знания
+\end{block}
 }
-\only<2>{
-	\smiley\ Учитываем непостоянную волатильность гауссовским процессом
+\only<2>{%
+\begin{block}{}
+	Учитываем непостоянную волатильность гауссовским процессом
+\end{block}
 }
-\only<3>{
+\only<3>{%
+\begin{block}{}
 	Для корреляций доходностей несколько вариантов модели, нет работ анализирующих их динамику
+\end{block}
+}
+\only<4>{%
+\begin{block}{}
+	При создании алгоритма преимущественное количество принимаемых во внимание показателей основывается именно на доходности
+\end{block}
 }
 \end{overlayarea}
 \end{frame}
@@ -230,7 +253,7 @@ $\small p(\Theta\cond\mathcal{D}) =
 \end{frame}
 
 \begin{frame}{Сравнительный анализ}
-\textbf{Бутстрап распределение коэфф. Шарпа (отложенный период)}
+\textbf{Бутстрап распределение коэфф. Шарпа\\(отложенный период)}
 \includegraphics[width=\linewidth]{performance-rus}
 \end{frame}
 \begin{frame}{Заключение}
