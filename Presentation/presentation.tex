@@ -5,6 +5,7 @@
 \usepackage{amssymb,amsfonts,amsmath,mathtext, wasysym}
 \usepackage{cite,enumerate,float,indentfirst}
 \usepackage{makecell}
+\usepackage{multirow}
 \usepackage{graphicx}
 \graphicspath{{../images/}{images/}{../Thesis/images/}} 
 \usepackage{tikz}
@@ -57,211 +58,191 @@
 \title[Моделирование динамики]{\thesisTitle}
 \institute[МГУ]{\small
 	Экономический Факультет\\
-	МГУ им. М.В.Ломоносова}
+	МГУ имени М.В.Ломоносова}
 \date[23 мая 2018]{\small Москва, 23 мая 2018}
 
 \begin{document}
 \maketitle
 \begin{frame}{Актуальность}
-\begin{enumerate}
-	\item Существует возрастающий интерес к составлению портфеля торговых стратегий
-	\item Есть ряд проблем, которые мешают применению стандартной теории
-	\item Исследования, решающие эти проблемы, отсутствуют
-\end{enumerate}
-\begin{overlayarea}{\linewidth}{4cm}
-	\only<1>{%
-		\begin{block}{Возрастающий интерес}
-			Новые хеджфоды агрегируют торговые стратегии для дальнейшего использования:
-			\begin{itemize}
-				\item \href{https://www.quantopian.com}{Quantopian} (Boston, USA)
-				\item \href{https://www.worldquant.com}{World Quant} (New York, USA)
-			\end{itemize}
-		\end{block}
-	}
-	\only<2>{%
-		\begin{block}{Основные проблемы}
-		\begin{itemize}
-			\item Огромная база алгоритмов, сравнительно короткие ряды
-			\item Алгоритмы составляют люди: распределение доходностей до~и~после создания -- разные вещи
-			\item Стандартные предпосылки о стохастической волатильности, возможной динамики корреляций
-		\end{itemize}
-	\end{block}
-	}
-\end{overlayarea}
+\begin{block}{Возрастающий интерес практиков}
+	Новые хеджфонды агрегируют торговые стратегии для формирования из них портфелей:
+	\begin{itemize}
+		\item Фонд \href{https://www.quantopian.com}{Quantopian} (Boston, USA)
+		\item Фонд \href{https://www.worldquant.com}{World Quant} (New York, USA)
+	\end{itemize}
+\end{block}
+\begin{block}{Стандартная портфельная теория не применима}
+	К стандартным предпосылки о стохастической волатильности, возможной динамики корреляций добавляются проблемы:
+	\begin{itemize}
+		\item Огромная база алгоритмов, сравнительно короткие ряды
+		\item Алгоритмы создают люди: распределение доходностей до~и~после создания -- разные вещи
+\end{itemize}
+\end{block}
+\textbf{Исследования, решающие эти проблемы, отсутствуют}
 \end{frame}
 
 \begin{frame}{Цель и Задачи}
-\textbf{Цель:} учесть априорные знания о доходностях алгоритмов при формировании портфеля торговых стратегий
+\textbf{Цель:} разработка процедуры составления портфеля биржевых торговых стратегий, учитывающей априорные знания о распределении их доходностей
 
 \textbf{Задачи:}
+
 \begin{enumerate}
+	\small
 	\item Сформировать общую схему моделирования динамики торговых стратегий
 	\item Предложить конкретные спецификации модели динамики доходностей
 	\item Предложить метод оценки модели, реализовать его в виде программного продукта
+	\item Предложить метод составления портфеля имея модель динамики
 	\item На реальных данных выбрать адекватную спецификацию и оценить ее
 	\item Сравнить разработанную процедуру с существующей, используемой на практике
 \end{enumerate}
 \end{frame}
 \begin{frame}{Преимущества байесовского подхода}
 \begin{minipage}{0.6\linewidth}
+	\[\small p(\Theta\cond\mathcal{D}) =
+	\frac
+	{p(\mathcal{D}\cond\Theta)p(\Theta)}
+	{p(\mathcal{D})}\]
 	\begin{itemize}
-		\item Учет экспертных знаний
+		\item Учет экспертных знаний в априорном распределении $p(\Theta)$
 		\item Интерпретируемость
 		\item Гибкость моделирования
-		\item Учет неуверенности в значениях параметров
+		\item Учет неуверенности при оценке параметров $p(\Theta\cond\mathcal{D})$
+		\item Учет неуверенности при прогнозировании
 	\end{itemize}
 \end{minipage}
 \begin{minipage}{0.38\linewidth}
 	\includegraphics[width=\linewidth]{bayes}
 \end{minipage}
+\textbf{Основной недостаток:} сложность оценивания модели
 \end{frame}
-\begin{frame}{Учёт предпосылок}
-\begin{itemize}
-	\item Точка перелома распределения доходностей
-	\begin{itemize}
-		\item[>] Структурный сдвиг -- часть модели
-	\end{itemize}
-	\item<2-> Доходности имеют непостоянную волатильность
-	\begin{itemize}
-		\item[>] Модели волатильности: GARCH, \textbf<3->{GPVol}
-	\end{itemize}
-	\item<3-> Динамика корреляций
-	\begin{itemize}
-		\item[>] Модели динамической корреляции: DCC, \textbf<4->{DECO}
-		\item<4->[>] Используем модификацию DECO
-		\item<5-|alert@5>[>]Верно ли для доходностей стратегий?
-	\end{itemize}
-\end{itemize}
-\begin{overlayarea}{\textwidth}{5cm}%
-\small
-\begin{block}<2->{Преимущества и недостатки}
-	\only<2>{
-		\begin{tabular}{L{.5\linewidth}|L{.5\linewidth}}
-			\textbf{GARCH} & \textbf{GPVol}\\
-			($-$) сложность с байесовским подходом & ($+$) богаче GARCH\\
-			& ($+$) проста в использовании
-		\end{tabular}
-	}
-	\only<3->{
-		\begin{tabular}{L{.5\linewidth}|L{.5\linewidth}}
-			\textbf{DCC} & \textbf{DECO}\\
-			($+$) полная динамика & ($-$) неполная динамика\\
-			($-$) не масштабируется & ($+$) масштабируется\\
-			 & ($-$) требуется модификация
-		\end{tabular}
-	}
-\end{block}	
-\end{overlayarea}
+\begin{frame}{Выбор инструментов моделирования динамики доходностей}
+\begin{block}{Динамика волатильности}
+Модель  \textbf{GPVol} (волатильность $\sim$ гауссовский процесс)
 
+\textbf{Преимущества:} богаче GARCH, интерпретируема и проста в использовани
+\end{block}
+\begin{block}{Динамика корреляций}
+	\begin{tabular}{L{.5\linewidth}|L{.5\linewidth}}
+		\textbf{DCC} & \textbf{DECO*} \checkmark\\
+		($+$) полная динамика & ($-$) неполная динамика\\
+		($-$) не масштабируется & ($+$) масштабируется\\
+		& ($-$) требуется модификация
+	\end{tabular}
+\end{block}
+* Предложена авторская модификация модели DECO c использованием гауссовского процесса
 \end{frame}
-\begin{frame}{Спецификация модели}
-\textbf{Ключевые компоненты:}
+\begin{frame}{Спецификация модели динамики доходностей}
+\textbf{Ключевые компоненты:} \hfill Уравнения в раздатке:
 \begin{itemize}
-	\item Доходности $r_t$ $\sim$ Гауссовский Процесс + шум
+	\item Доходности $r_t$ $\sim$ Гауссовский Процесс (ГП) + Шум \hfill (12)
 	\begin{itemize}
-		\item[\checkmarksmall] среднее ГП -- средняя доходность
-		
-		(о ней много знаем)
+		\item[\checkmarksmall] среднее ГП -- \textbf{средняя доходность} \hfill (1--2)
 	\end{itemize}
-	\item<2-> Волатильность $\sigma_t$ $\sim$ Гауссовский Процесс
+	\item Волатильность $\sigma_t$ $\sim$ Гауссовский Процесс \hfill (9)
 	\begin{enumerate}
 		\item[\checkmarksmall] Идеи GPVol
 	\end{enumerate}
-	\item<3-> Корреляции доходностей ТС?
+	\item Корреляции доходностей торговых стратегий
 	\begin{enumerate}
-		\item Динамические $\rightarrow$ модификация DECO с ГП
-		\item Статические 
-		\item Без корреляций
+		\item Динамические $\rightarrow$ модель DECO с ГП \hfill (14--15)
+		\item Статические \hfill (17)
+		\item Без корреляций \hfill (18)
 	\end{enumerate}
-	\item<4-> Структурный сдвиг
+	\item Структурный сдвиг (учет момента создания алгоритма)
 	\begin{itemize}
-		\item[\checkmarksmall] только для средних доходностей
+		\item[\checkmarksmall] только для \textbf{средних доходностей} \hfill (1, 2, 12)
 	\end{itemize}
 \end{itemize}
-\vspace{-.8\baselineskip}
-\begin{overlayarea}{\textwidth}{4cm}
-\only<1>{%
-	\begin{block}{}
-Гауссовский процесс имеет интерпретируемые параметры, позволяет учесть априорные знания
-\end{block}
-}
-\only<2>{%
-\begin{block}{}
-	Учитываем непостоянную волатильность гауссовским процессом
-\end{block}
-}
-\only<3>{%
-\begin{block}{}
-	Для корреляций доходностей несколько вариантов модели, нет работ анализирующих их динамику
-\end{block}
-}
-\only<4>{%
+
 \begin{block}{}
 	При создании алгоритма преимущественное количество принимаемых во внимание показателей основывается именно на доходности
 \end{block}
-}
-\end{overlayarea}
 \end{frame}
+\begin{frame}{Оценка байесовской модели}
+Оценка байесовской модели -- вывод апостериорного распределения $p(\Theta\cond\mathcal{D})$
+\[p(\Theta\cond\mathcal{D}) =
+\frac
+{p(\mathcal{D}\cond\Theta)p(\Theta)}
+{p(\mathcal{D})}\]
+Где:
+\begin{itemize}
+	\item $\mathcal{D}$ -- данные
+	\item $p(\Theta)$ -- априорное распределение
+	\item $p(\mathcal{D}|\Theta)$ -- правдоподобие
+\end{itemize}
+Получение выборки $\{\Theta_i\}\sim p(\Theta\cond\mathcal{D})$ -- Hamiltonian Monte Carlo
+Симуляция будущих траекторий доходностей $d_{new}$:
+\begin{align*}
+\text{аналитически сложно}&\qquad p(d_{new}\cond\mathcal{D})=\int p(d_{new}|\Theta)p(\Theta\cond\mathcal{D}) d\Theta,\\
+\text{или имея $\{\Theta_i\}$}&\qquad \{d_{new}^{ik}\} \sim p(d_{new}|\Theta_i)\qquad\text{легко}
+\end{align*}
+\end{frame}
+
 \begin{frame}{Оптимизация портфеля}
-\textbf{Метод Монте Карло}
+Построение портфеля основывается на симуляции будущих траекторий доходностей методом \textbf{Монте--Карло}
 
 \begin{minipage}{0.49\linewidth}
 	\begin{enumerate}
-		\item Оцениваем модель
-		\item Делаем симуляции доходностей
-		\item Оптимизируем матожидание функции полезности инвестора
+		\item Оцениваем модель\\$\{\Theta_i\}\sim p(\Theta\cond\mathcal{D})$
+		\item Делаем симуляции траекторий  доходностей алгоритмов\\$\{d_{new}^{ik}\} \sim p(d_{new}|\Theta_i)$ 
+		\item Оптимизируем матожидание функции полезности инвестора по долям в портфеле $w$\\
+		$\tfrac{1}{I\dot K}\sum_{i, k}U(d^{ik}_{new}, w)\to \underset{w}{max}$
 	\end{enumerate}
 \end{minipage}
 \begin{minipage}{0.49\linewidth}
 	\includegraphics[width=\linewidth]{isoelastic}
+	\centering
 	
 	Полезность инвестора
-\end{minipage}
-\end{frame}
-\begin{frame}{Оценка байесовской модели}
-\textbf{Hamiltonian Monte Carlo}
-\begin{tabular}{lr}
-\includegraphics[height=2.5em]{pymc3}
-&\makecell{\vspace{1.5em}
-$\small p(\Theta\cond\mathcal{D}) =
-\frac
-{p(\mathcal{D}\cond\Theta)p(\Theta)}
-{\color{red}{p(\mathcal{D})}}$}
-\end{tabular}
-
-\begin{minipage}{.5\linewidth}
-	\begin{itemize}
-		\item[+] Сэмплирование из сложных распределений
-		\item[+] Хорошие условия сходимости
-		\item[\checkmarksmall] Требуется непрерывность параметров
-	\end{itemize}
-\end{minipage}
-\begin{minipage}{.48\linewidth}
-	\includegraphics[width=\linewidth]{sampleHMC}
 \end{minipage}
 \end{frame}
 
 \begin{frame}{Данные}
 Данные были предоставлены компанией \textbf{Quantopian}
 \begin{itemize}
-	\item Всего 700000+ алгоритмов за период 4 года
-	\item Существует внутренняя система отбора стабильных алгоритмов
-	\item Наблюдается эффект стохастической волатильности
+	\item Всего более 700000 алгоритмов за период 4 года
+	\item Существует внутренняя система отбора стабильных алгоритмов, отбирает около $0.05\%$
+\end{itemize}
+Эмпирические факты для отобранных алгоритмов:
+\begin{itemize}
+\item Наблюдается эффект не постоянной волатильности
 	\item Корреляции довольно стабильны во времени
 \end{itemize}
-Подходят только спецификации со статическими корреляциями
+\textbf{Подходят только спецификации со статическими корреляциями}
 \end{frame}
+\begin{frame}{Описание процедуры сравнения эффективности}
+Сравнивается эффективность предложенной процедуры с базовой (модель Марковица).
 
-\begin{frame}{Сравнительный анализ}
-\textbf{Бутстрап распределение коэфф. Шарпа\\(отложенный период)}
-\includegraphics[width=\linewidth]{performance-rus}
-\end{frame}
-\begin{frame}{Заключение}
+Критерий -- коэффициент Шарпа на отложенной выборке
 \begin{itemize}
-	\item Предложен метод составления портфеля биржевых торговых
-стратегий, учитывающий априорные знания о распределении их доходностей
-	\item Эффективность метода по сравнению с бенчмарком подтверждена экспериментально
-	\item Предложена модификация базового компонента модели, динамики а именно расширение DECO с использованем гаусовского процессса
+	\item Составление выборки
+	\begin{itemize}
+		\item Всего 4 года значений доходностей 150 финансовых стратегий от Quantopian
+		\item Обучающая выборка -- первые два года
+		\item Отложенная выборка -- последние два года
+	\end{itemize}
+	\item Подготовка бутстрап процедуры
+	\begin{itemize}
+		\item Сгенерировано 500+ выборок алгоритмов размера 20
+	\end{itemize}
+	\item Построение бутстрап распределения коэф. Шарпа
+	\begin{itemize}
+		\item Тремя методами: на основе моделей <<с корреляциями>>, <<без корреляций>> и по Марковицу, строятся портфели по данным обучающей выборки
+		\item Считается критерий качества (коэффициент Шарпа) на отложенной выборке
+	\end{itemize}
+\end{itemize}
+\end{frame}
+\begin{frame}{Сравнительный анализ}
+\textbf{Бутстрап распределение коэфф. Шарпа портфелей\\(отложенный период)}
+\includegraphics[width=\linewidth]{performance-rus-1-1}
+\end{frame}
+\begin{frame}{Результаты исследования}
+\begin{itemize}
+	\item \textbf{Реализованы} спецификации модели \textbf{с учетом и без учета динамики корреляций}
+	\item Для оценки модели динамики корреляций предложена \textbf{модификация базового метода DECO}
+	\item Для определения адекватной спецификации модели \textbf{впервые} проведен эмпирический \textbf{анализ динамики корреляций доходностей торговых стратегий}
+	\item \textbf{Предложен дизайн процедуры сравнения} для выявления практической значимости работы
+	\item \textbf{Показана эффективность} использования байесовского подхода по сравнению с традиционно используемым
 \end{itemize}
 \end{frame}
 \end{document}

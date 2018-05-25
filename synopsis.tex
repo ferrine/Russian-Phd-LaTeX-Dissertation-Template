@@ -9,14 +9,12 @@
 \input{Synopsis/synpackages}  % Пакеты для автореферата
 \input{Synopsis/userpackages} % Пакеты для специфических пользовательских задач
 
-\input{common/newnames}       % Новые переменные, которые могут использоваться во всём проекте
 \input{Synopsis/setup}        % Упрощённые настройки шаблона 
 
 \input{common/data}           % Основные сведения
 \input{common/styles}         % Стили общие для диссертации и автореферата
 \input{Synopsis/synstyles}    % Стили для автореферата
 \input{Synopsis/userstyles}   % Стили для специфических пользовательских задач
-\input{biblio/bibliopreamble} % Настройки библиографии из внешнего файла (там же выбор: встроенная или на основе biblatex)
 
 \begin{document}
 
@@ -32,23 +30,5 @@
 
 \small
 \begin{center}
-    \textit{\thesisAuthor}
-    \par\medskip
-    
-    \thesisTitle
-    \par\medskip
-    
-    Автореф. дис. на соискание ученой степени \thesisDegreeShort
-    \par\bigskip
-    
-    Подписано в печать \blank[\widthof{999}].\blank[\widthof{999}].\blank[\widthof{99999}].
-    Заказ № \blank[\widthof{999999999999}]
-    
-    Формат 60\(\times\)90/16. Усл. печ. л. 1. Тираж 100 экз.
-    %Это не совсем формат А5, но наиболее близкий, подробнее: http://ru.wikipedia.org/w/index.php?oldid=78976454
-    
-    Типография \blank[0.5\linewidth]
-\end{center}
-\cleardoublepage
 
 \end{document}
