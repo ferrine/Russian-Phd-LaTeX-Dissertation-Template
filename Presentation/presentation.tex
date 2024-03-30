@@ -1,229 +1,248 @@
-\documentclass[14pt]{beamer}
+\documentclass[12pt]{beamer}
 \usepackage[T2A]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[english,russian]{babel}
-\usepackage{amssymb,amsfonts,amsmath,mathtext}
+\usepackage{amssymb,amsfonts,amsmath,mathtext, wasysym}
 \usepackage{cite,enumerate,float,indentfirst}
+\usepackage{makecell}
+\usepackage{multirow}
+\usepackage{graphicx}
+\graphicspath{{../images/}{images/}{../Thesis/images/}} 
+\usepackage{tikz}
+\usepackage{calc}
+\def\checkmark{\tikz\fill[scale=0.7](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;}
+\def\checkmarksmall{\tikz\fill[scale=0.5](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;}
+\newcommand{\cond}{\;|\;}
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+%\usetheme[secheader]{Boadilla}
+%\usecolortheme{seahorse}
 
-\graphicspath{{../images/}{images/}} 
-
-
-
-% \usetheme[secheader]{Boadilla}
-% \usecolortheme{seahorse}
-
-\usetheme{Pittsburgh}
+\usetheme{Madrid}
 \usecolortheme{whale}
+\setbeamertemplate{enumerate items}[circle]
+\setbeamertemplate{itemize items}[circle]
+
+\makeatletter
+\long\def\beamer@author[#1]#2{%
+	\def\insertauthor{\def\inst{\beamer@insttitle}\def\and{\beamer@andtitle}%
+		\begin{minipage}{\linewidth}#2\end{minipage}}%
+	\def\beamer@shortauthor{#1}%
+	\ifbeamer@autopdfinfo%
+	\def\beamer@andstripped{}%
+	\beamer@stripands#1 \and\relax
+	{\let\inst=\@gobble\let\thanks=\@gobble\def\and{, }\hypersetup{pdfauthor={\beamer@andstripped}}}
+	\fi%
+}
+\makeatother
+\author[Кочуров М.В.]{%
+	\begin{center}
+		\large{Кочуров Максим}
+	\end{center}
+\vspace{1\baselineskip}
+	\begin{flushright}
+		Научный руководитель:\\
+		доцент, к.э.н. Лукаш Е.Н.
+	\end{flushright}%
+}
+
+
 
 \beamertemplatenavigationsymbolsempty
 
 \newcommand{\todo}{\alert}
 \input{../common/data.tex}      % Основные сведения
 
-\setbeamercolor{footline}{fg=blue}
-\setbeamertemplate{footline}{
-  \leavevmode%
-  \hbox{%
-  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{}%
-    % И. О. Фамилия, Организация кратко
-    \thesisAuthorShort, \thesisOrganizationShort
-  \end{beamercolorbox}%
-  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{}%
-    % Город, 20XX
-    \thesisCity, \thesisYear
-  \end{beamercolorbox}%
-  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{}%
-  Стр. \insertframenumber{} из \inserttotalframenumber \hspace*{2ex}
-  \end{beamercolorbox}}%
-  \vskip0pt%
-}
 
-\newcommand{\itemi}{\item[\checkmark]}
-
-%\title{\small{Название презентации}}
-\title{\small{\thesisTitle}}
-\author{\small{%
-\emph{Выступающий:}~\thesisAuthorShort\\%
-\emph{Руководитель:}~\supervisorRegaliaShort~\supervisorFioShort}\\%
-\vspace{30pt}%
-\thesisOrganization%
-\vspace{20pt}%
-}
-\date{\small{\thesisCity, \thesisYear}}
+\title[Моделирование динамики]{\thesisTitle}
+\institute[МГУ]{\small
+	Экономический Факультет\\
+	МГУ имени М.В.Ломоносова}
+\date[23 мая 2018]{\small Москва, 23 мая 2018}
 
 \begin{document}
-
 \maketitle
-
-\begin{frame}
-\frametitle{Цели и задачи}
-\begin{itemize}
-  \item \textbf{Предмет исследования:} 
-  \item \textbf{Исследуемые характеристики:} 
-  \item \textbf{Цель исследования:} 
-  \item \textbf{Актуальность:} 
+\begin{frame}{Актуальность}
+\begin{block}{Возрастающий интерес практиков}
+	Новые хеджфонды агрегируют торговые стратегии для формирования из них портфелей:
+	\begin{itemize}
+		\item Фонд \href{https://www.quantopian.com}{Quantopian} (Boston, USA)
+		\item Фонд \href{https://www.worldquant.com}{World Quant} (New York, USA)
+	\end{itemize}
+\end{block}
+\begin{block}{Стандартная портфельная теория не применима}
+	К стандартным предпосылки о стохастической волатильности, возможной динамики корреляций добавляются проблемы:
+	\begin{itemize}
+		\item Огромная база алгоритмов, сравнительно короткие ряды
+		\item Алгоритмы создают люди: распределение доходностей до~и~после создания -- разные вещи
 \end{itemize}
+\end{block}
+\textbf{Исследования, решающие эти проблемы, отсутствуют}
 \end{frame}
 
-\begin{frame}
-\frametitle{Проблемы}
-\begin{itemize}
-  \item Проблема 1
-  \item Проблема 2
-  \item Проблема 3    
-\end{itemize}
-\end{frame}
+\begin{frame}{Цель и Задачи}
+\textbf{Цель:} разработка процедуры составления портфеля биржевых торговых стратегий, учитывающей априорные знания о распределении их доходностей
 
-\begin{frame}
-\frametitle{План работ}
+\textbf{Задачи:}
+
 \begin{enumerate}
-  \item \textbf{Задача 1}
-  \begin{itemize}
-    \item Подзадача 1-1
-    \item Подзадача 1-2
-  \end{itemize}
-  \item \textbf{Задача 2}
-  \begin{itemize}
-    \item Подзадача 2-1
-    \item Подзадача 2-2
-    \item Подзадача 2-3
-  \end{itemize}
-  \item \textbf{Задача 3}
-  \begin{itemize}
-    \item Подзадача 3-1
-    \item Подзадача 3-2
-    \item Подзадача 3-3
-  \end{itemize}
+	\small
+	\item Сформировать общую схему моделирования динамики торговых стратегий
+	\item Предложить конкретные спецификации модели динамики доходностей
+	\item Предложить метод оценки модели, реализовать его в виде программного продукта
+	\item Предложить метод составления портфеля имея модель динамики
+	\item На реальных данных выбрать адекватную спецификацию и оценить ее
+	\item Сравнить разработанную процедуру с существующей, используемой на практике
 \end{enumerate}
 \end{frame}
+\begin{frame}{Преимущества байесовского подхода}
+\begin{minipage}{0.6\linewidth}
+	\[\small p(\Theta\cond\mathcal{D}) =
+	\frac
+	{p(\mathcal{D}\cond\Theta)p(\Theta)}
+	{p(\mathcal{D})}\]
+	\begin{itemize}
+		\item Учет экспертных знаний в априорном распределении $p(\Theta)$
+		\item Интерпретируемость
+		\item Гибкость моделирования
+		\item Учет неуверенности при оценке параметров $p(\Theta\cond\mathcal{D})$
+		\item Учет неуверенности при прогнозировании
+	\end{itemize}
+\end{minipage}
+\begin{minipage}{0.38\linewidth}
+	\includegraphics[width=\linewidth]{bayes}
+\end{minipage}
+\textbf{Основной недостаток:} сложность оценивания модели
+\end{frame}
+\begin{frame}{Выбор инструментов моделирования динамики доходностей}
+\begin{block}{Динамика волатильности}
+Модель  \textbf{GPVol} (волатильность $\sim$ гауссовский процесс)
 
-\begin{frame}
-\frametitle{Список обыкновенный}
+\textbf{Преимущества:} богаче GARCH, интерпретируема и проста в использовани
+\end{block}
+\begin{block}{Динамика корреляций}
+	\begin{tabular}{L{.5\linewidth}|L{.5\linewidth}}
+		\textbf{DCC} & \textbf{DECO*} \checkmark\\
+		($+$) полная динамика & ($-$) неполная динамика\\
+		($-$) не масштабируется & ($+$) масштабируется\\
+		& ($-$) требуется модификация
+	\end{tabular}
+\end{block}
+* Предложена авторская модификация модели DECO c использованием гауссовского процесса
+\end{frame}
+\begin{frame}{Спецификация модели динамики доходностей}
+\textbf{Ключевые компоненты:} \hfill Уравнения в раздатке:
 \begin{itemize}
-  \item Пункт 1
-  \item Пункт 2
-  \item Пункт 3
+	\item Доходности $r_t$ $\sim$ Гауссовский Процесс (ГП) + Шум \hfill (12)
+	\begin{itemize}
+		\item[\checkmarksmall] среднее ГП -- \textbf{средняя доходность} \hfill (1--2)
+	\end{itemize}
+	\item Волатильность $\sigma_t$ $\sim$ Гауссовский Процесс \hfill (9)
+	\begin{enumerate}
+		\item[\checkmarksmall] Идеи GPVol
+	\end{enumerate}
+	\item Корреляции доходностей торговых стратегий
+	\begin{enumerate}
+		\item Динамические $\rightarrow$ модель DECO с ГП \hfill (14--15)
+		\item Статические \hfill (17)
+		\item Без корреляций \hfill (18)
+	\end{enumerate}
+	\item Структурный сдвиг (учет момента создания алгоритма)
+	\begin{itemize}
+		\item[\checkmarksmall] только для \textbf{средних доходностей} \hfill (1, 2, 12)
+	\end{itemize}
+\end{itemize}
+
+\begin{block}{}
+	При создании алгоритма преимущественное количество принимаемых во внимание показателей основывается именно на доходности
+\end{block}
+\end{frame}
+\begin{frame}{Оценка байесовской модели}
+Оценка байесовской модели -- вывод апостериорного распределения $p(\Theta\cond\mathcal{D})$
+\[p(\Theta\cond\mathcal{D}) =
+\frac
+{p(\mathcal{D}\cond\Theta)p(\Theta)}
+{p(\mathcal{D})}\]
+Где:
+\begin{itemize}
+	\item $\mathcal{D}$ -- данные
+	\item $p(\Theta)$ -- априорное распределение
+	\item $p(\mathcal{D}|\Theta)$ -- правдоподобие
+\end{itemize}
+Получение выборки $\{\Theta_i\}\sim p(\Theta\cond\mathcal{D})$ -- Hamiltonian Monte Carlo
+Симуляция будущих траекторий доходностей $d_{new}$:
+\begin{align*}
+\text{аналитически сложно}&\qquad p(d_{new}\cond\mathcal{D})=\int p(d_{new}|\Theta)p(\Theta\cond\mathcal{D}) d\Theta,\\
+\text{или имея $\{\Theta_i\}$}&\qquad \{d_{new}^{ik}\} \sim p(d_{new}|\Theta_i)\qquad\text{легко}
+\end{align*}
+\end{frame}
+
+\begin{frame}{Оптимизация портфеля}
+Построение портфеля основывается на симуляции будущих траекторий доходностей методом \textbf{Монте--Карло}
+
+\begin{minipage}{0.49\linewidth}
+	\begin{enumerate}
+		\item Оцениваем модель\\$\{\Theta_i\}\sim p(\Theta\cond\mathcal{D})$
+		\item Делаем симуляции траекторий  доходностей алгоритмов\\$\{d_{new}^{ik}\} \sim p(d_{new}|\Theta_i)$ 
+		\item Оптимизируем матожидание функции полезности инвестора по долям в портфеле $w$\\
+		$\tfrac{1}{I\dot K}\sum_{i, k}U(d^{ik}_{new}, w)\to \underset{w}{max}$
+	\end{enumerate}
+\end{minipage}
+\begin{minipage}{0.49\linewidth}
+	\includegraphics[width=\linewidth]{isoelastic}
+	\centering
+	
+	Полезность инвестора
+\end{minipage}
+\end{frame}
+
+\begin{frame}{Данные}
+Данные были предоставлены компанией \textbf{Quantopian}
+\begin{itemize}
+	\item Всего более 700000 алгоритмов за период 4 года
+	\item Существует внутренняя система отбора стабильных алгоритмов, отбирает около $0.05\%$
+\end{itemize}
+Эмпирические факты для отобранных алгоритмов:
+\begin{itemize}
+\item Наблюдается эффект не постоянной волатильности
+	\item Корреляции довольно стабильны во времени
+\end{itemize}
+\textbf{Подходят только спецификации со статическими корреляциями}
+\end{frame}
+\begin{frame}{Описание процедуры сравнения эффективности}
+Сравнивается эффективность предложенной процедуры с базовой (модель Марковица).
+
+Критерий -- коэффициент Шарпа на отложенной выборке
+\begin{itemize}
+	\item Составление выборки
+	\begin{itemize}
+		\item Всего 4 года значений доходностей 150 финансовых стратегий от Quantopian
+		\item Обучающая выборка -- первые два года
+		\item Отложенная выборка -- последние два года
+	\end{itemize}
+	\item Подготовка бутстрап процедуры
+	\begin{itemize}
+		\item Сгенерировано 500+ выборок алгоритмов размера 20
+	\end{itemize}
+	\item Построение бутстрап распределения коэф. Шарпа
+	\begin{itemize}
+		\item Тремя методами: на основе моделей <<с корреляциями>>, <<без корреляций>> и по Марковицу, строятся портфели по данным обучающей выборки
+		\item Считается критерий качества (коэффициент Шарпа) на отложенной выборке
+	\end{itemize}
 \end{itemize}
 \end{frame}
-
-\begin{frame}
-\frametitle{Одиночное изображение}
-\begin{figure}[H]
-  \center
-  \includegraphics[width=0.8\linewidth]{latex}
-\end{figure}
+\begin{frame}{Сравнительный анализ}
+\textbf{Бутстрап распределение коэфф. Шарпа портфелей\\(отложенный период)}
+\includegraphics[width=\linewidth]{performance-rus-1-1}
 \end{frame}
-
-\begin{frame}
-\frametitle{Формулы}
-$$
-\left\{
-  \begin{array}{rl}
-    \dot x = & \sigma (y-x) \\
-    \dot y = & x (r - z) - y \\
-    \dot z = & xy - bz
-  \end{array}
-\right.
-$$
-\end{frame}
-
-\begin{frame}
-\frametitle{Составное изображение}
-\begin{figure}[h]
-  \begin{minipage}[h]{0.49\linewidth}
-    \textbf{Составная \\ подпись 1}
-    \center{\includegraphics[width=1\linewidth]{knuth1}}
-  \end{minipage}
-  \hfill
-  \begin{minipage}[h]{0.49\linewidth}
-    \textbf{Составная \\ подпись 2}
-    \center{\includegraphics[width=1\linewidth]{knuth2}}
-  \end{minipage}
-\end{figure}
-\end{frame}
-
-\begin{frame}
-\frametitle{Таблица}
-\begin{tabular}{|l|l|}
-\hline
-\textbf{Заголовок 1} & \textbf{Заголовок 2} \\
-\hline
-Сумма & $b+a$ \\
-\hline
-Разность & $a-b$ \\
-\hline
-Произведение & $a*b$ \\
-\hline
-\end{tabular}
-\end{frame}
-
-\begin{frame}
-\frametitle{Большой многоуровневый список}
+\begin{frame}{Результаты исследования}
 \begin{itemize}
-  \item \textbf{Пункт 1}
-    \begin{itemize}
-      \itemi Подпункт 1-1
-      \itemi Подпункт 1-2
-    \end{itemize}
-  \item \textbf{Пункт 2}
-    \begin{itemize}
-      \itemi Подпункт 2-1
-    \end{itemize}
-  \item \textbf{Пункт 3}
-    \begin{itemize}
-      \itemi Подпункт 3-1
-      \itemi Подпункт 3-2
-    \end{itemize}
-  \item \textbf{Пункт 4}
-    \begin{itemize}
-      \itemi Подпункт 4-1
-    \end{itemize}
-  \item \textbf{Пункт 5}
-    \begin{itemize}
-      \itemi Подпункт 5-1
-      \itemi Подпункт 5-2
-      \itemi Подпункт 5-3
-    \end{itemize}
+	\item \textbf{Реализованы} спецификации модели \textbf{с учетом и без учета динамики корреляций}
+	\item Для оценки модели динамики корреляций предложена \textbf{модификация базового метода DECO}
+	\item Для определения адекватной спецификации модели \textbf{впервые} проведен эмпирический \textbf{анализ динамики корреляций доходностей торговых стратегий}
+	\item \textbf{Предложен дизайн процедуры сравнения} для выявления практической значимости работы
+	\item \textbf{Показана эффективность} использования байесовского подхода по сравнению с традиционно используемым
 \end{itemize}
 \end{frame}
-
-\begin{frame}
-\frametitle{Четыре изображения}
-\begin{figure}[H]
-  \center
-    \includegraphics[width=0.4\linewidth]{latex}
-    \includegraphics[width=0.4\linewidth]{latex}\\
-    \includegraphics[width=0.4\linewidth]{latex}
-    \includegraphics[width=0.4\linewidth]{latex}
-\end{figure}
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}
-\frametitle{Перспективы развития проекта}
-\begin{itemize}
-  \item Перспектива 1
-  \item Перспектива 2
-  \item Перспектива 3
-  \item Перспектива 4
-  \item Перспектива 5
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\frametitle{Результаты работы}
-\begin{itemize}
-  \item Результат 1
-  \item Результат 2
-  \item Результат 3
-  \item Результат 4
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\begin{center}
-Спасибо за внимание!
-\end{center}
-\end{frame}
-
-\end{document} 
+\end{document}

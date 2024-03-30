@@ -1,32 +1,32 @@
-.PHONY: synopsis dissertation preformat pdflatex talk dissertation-preformat dissertation-formated synopsis-preformat examples clean distclean release draft
+.PHONY: synopsis thesis preformat pdflatex talk thesis-preformat thesis-formated synopsis-preformat examples clean distclean release draft
 
-all: synopsis dissertation
+all: synopsis thesis
 
-preformat: synopsis-preformat dissertation-preformat
+preformat: synopsis-preformat thesis-preformat
 
-dissertation:
-	#	$(MAKE) -C Dissertation
-	latexmk -pdf -pdflatex="xelatex %O %S" dissertation
+thesis:
+	#	$(MAKE) -C Thesis
+	latexmk -pdf -pdflatex="xelatex %O %S" thesis
 
 pdflatex:
-	latexmk -pdf -pdflatex="pdflatex %O %S" dissertation
+	latexmk -pdf -pdflatex="pdflatex %O %S" thesis
 
 synopsis:
 	#	$(MAKE) -C Synopsis
 	latexmk -pdf -pdflatex="xelatex %O %S" synopsis
 draft:	
-	latexmk -pdf -pdflatex="xelatex %O '\newcounter{draft}\setcounter{draft}{1}\input{%S}'" dissertation
+	latexmk -pdf -pdflatex="xelatex %O '\newcounter{draft}\setcounter{draft}{1}\input{%S}'" thesis
 	latexmk -pdf -pdflatex="xelatex %O '\newcounter{draft}\setcounter{draft}{1}\input{%S}'" synopsis
 
 talk:
 	$(MAKE) talk -C Presentation
 
-dissertation-preformat:
-	etex -ini "&latex" mylatexformat.ltx """dissertation.tex"""
-	latexmk -pdf -jobname=dissertation -silent --shell-escape dissertation.tex
+thesis-preformat:
+	etex -ini "&latex" mylatexformat.ltx """thesis.tex"""
+	latexmk -pdf -jobname=thesis -silent --shell-escape thesis.tex
 
-dissertation-formated:
-	latexmk -pdf -jobname=dissertation -silent --shell-escape dissertation.tex
+thesis-formated:
+	latexmk -pdf -jobname=thesis -silent --shell-escape thesis.tex
 
 synopsis-preformat:
 	etex -ini "&latex" mylatexformat.ltx """synopsis.tex"""
@@ -36,197 +36,197 @@ pdflatex-examples:
 	#
 	$(eval RCFILE = nodraft_nopscyr_bibtex_latexmkrc)
 	$(eval DESCR = pdflatex_bibtex)
-	latexmk -pdf -jobname="dissertation_$(DESCR)" -r $(RCFILE) -silent -shell-escape dissertation
+	latexmk -pdf -jobname="thesis_$(DESCR)" -r $(RCFILE) -silent -shell-escape thesis
 	latexmk -pdf -jobname="synopsis_$(DESCR)" -r $(RCFILE) -silent -shell-escape synopsis
-	latexmk -pdf -jobname="dissertation_$(DESCR)" -c dissertation
-	rm -f dissertation_$(DESCR).bbl
+	latexmk -pdf -jobname="thesis_$(DESCR)" -c thesis
+	rm -f thesis_$(DESCR).bbl
 	latexmk -pdf -jobname="synopsis_$(DESCR)" -c synopsis
 	rm -f synopsis_$(DESCR).bbl
 	#
 	$(eval RCFILE = nodraft_nopscyr_latexmkrc)
 	$(eval DESCR = pdflatex)
-	latexmk -pdf -jobname="dissertation_$(DESCR)" -r $(RCFILE) -silent -shell-escape dissertation
+	latexmk -pdf -jobname="thesis_$(DESCR)" -r $(RCFILE) -silent -shell-escape thesis
 	latexmk -pdf -jobname="synopsis_$(DESCR)" -r $(RCFILE) -silent -shell-escape synopsis
-	latexmk -pdf -jobname="dissertation_$(DESCR)" -c dissertation
-	rm -f dissertation_$(DESCR).bbl
+	latexmk -pdf -jobname="thesis_$(DESCR)" -c thesis
+	rm -f thesis_$(DESCR).bbl
 	latexmk -pdf -jobname="synopsis_$(DESCR)" -c synopsis
 	rm -f synopsis_$(DESCR).bbl
-	rm -f dissertation_$(DESCR).run.xml
+	rm -f thesis_$(DESCR).run.xml
 	rm -f synopsis_$(DESCR).run.xml
 
 examples:
 	#
 	$(eval RCFILE = nodraft_pscyr_bibtex_latexmkrc)
 	$(eval DESCR = pdflatex_pscyr_bibtex)
-	latexmk -pdf -jobname="dissertation_$(DESCR)" -r $(RCFILE) -silent -shell-escape dissertation
+	latexmk -pdf -jobname="thesis_$(DESCR)" -r $(RCFILE) -silent -shell-escape thesis
 	latexmk -pdf -jobname="synopsis_$(DESCR)" -r $(RCFILE) -silent -shell-escape synopsis
-	latexmk -pdf -jobname="dissertation_$(DESCR)" -c dissertation
-	rm -f dissertation_$(DESCR).bbl
+	latexmk -pdf -jobname="thesis_$(DESCR)" -c thesis
+	rm -f thesis_$(DESCR).bbl
 	latexmk -pdf -jobname="synopsis_$(DESCR)" -c synopsis
 	rm -f synopsis_$(DESCR).bbl
 	#
 	$(eval RCFILE = nodraft_nopscyr_bibtex_latexmkrc)
 	$(eval DESCR = pdflatex_bibtex)
-	latexmk -pdf -jobname="dissertation_$(DESCR)" -r $(RCFILE) -silent -shell-escape dissertation
+	latexmk -pdf -jobname="thesis_$(DESCR)" -r $(RCFILE) -silent -shell-escape thesis
 	latexmk -pdf -jobname="synopsis_$(DESCR)" -r $(RCFILE) -silent -shell-escape synopsis
-	latexmk -pdf -jobname="dissertation_$(DESCR)" -c dissertation
-	rm -f dissertation_$(DESCR).bbl
+	latexmk -pdf -jobname="thesis_$(DESCR)" -c thesis
+	rm -f thesis_$(DESCR).bbl
 	latexmk -pdf -jobname="synopsis_$(DESCR)" -c synopsis
 	rm -f synopsis_$(DESCR).bbl
 	#
 	$(eval DESCR = xelatex_bibtex)
-	latexmk -xelatex -jobname="dissertation_$(DESCR)" -r $(RCFILE) -silent -shell-escape dissertation
+	latexmk -xelatex -jobname="thesis_$(DESCR)" -r $(RCFILE) -silent -shell-escape thesis
 	latexmk -xelatex -jobname="synopsis_$(DESCR)" -r $(RCFILE) -silent -shell-escape synopsis
-	latexmk -xelatex -jobname="dissertation_$(DESCR)" -c dissertation
-	rm -f dissertation_$(DESCR).bbl
-	rm -f dissertation_$(DESCR).xdv
+	latexmk -xelatex -jobname="thesis_$(DESCR)" -c thesis
+	rm -f thesis_$(DESCR).bbl
+	rm -f thesis_$(DESCR).xdv
 	latexmk -xelatex -jobname="synopsis_$(DESCR)" -c synopsis
 	rm -f synopsis_$(DESCR).bbl
 	rm -f synopsis_$(DESCR).xdv
 	#
 	$(eval DESCR = lualatex_bibtex)
-	latexmk -lualatex -jobname="dissertation_$(DESCR)" -r $(RCFILE) -silent -shell-escape dissertation
+	latexmk -lualatex -jobname="thesis_$(DESCR)" -r $(RCFILE) -silent -shell-escape thesis
 	latexmk -lualatex -jobname="synopsis_$(DESCR)" -r $(RCFILE) -silent -shell-escape synopsis
-	latexmk -lualatex -jobname="dissertation_$(DESCR)" -c dissertation
-	rm -f dissertation_$(DESCR).bbl
+	latexmk -lualatex -jobname="thesis_$(DESCR)" -c thesis
+	rm -f thesis_$(DESCR).bbl
 	latexmk -lualatex -jobname="synopsis_$(DESCR)" -c synopsis
 	rm -f synopsis_$(DESCR).bbl
 	#
 	$(eval RCFILE = draft_pscyr_bibtex_latexmkrc)
 	$(eval DESCR = pdflatex_pscyr_bibtex_draft)
-	latexmk -pdf -jobname="dissertation_$(DESCR)" -r $(RCFILE) -silent -shell-escape dissertation
+	latexmk -pdf -jobname="thesis_$(DESCR)" -r $(RCFILE) -silent -shell-escape thesis
 	latexmk -pdf -jobname="synopsis_$(DESCR)" -r $(RCFILE) -silent -shell-escape synopsis
-	latexmk -pdf -jobname="dissertation_$(DESCR)" -c dissertation
-	rm -f dissertation_$(DESCR).bbl
+	latexmk -pdf -jobname="thesis_$(DESCR)" -c thesis
+	rm -f thesis_$(DESCR).bbl
 	latexmk -pdf -jobname="synopsis_$(DESCR)" -c synopsis
 	rm -f synopsis_$(DESCR).bbl
 	#
 	$(eval RCFILE = draft_nopscyr_bibtex_latexmkrc)
 	$(eval DESCR = pdflatex_bibtex_draft)
-	latexmk -pdf -jobname="dissertation_$(DESCR)" -r $(RCFILE) -silent -shell-escape dissertation
+	latexmk -pdf -jobname="thesis_$(DESCR)" -r $(RCFILE) -silent -shell-escape thesis
 	latexmk -pdf -jobname="synopsis_$(DESCR)" -r $(RCFILE) -silent -shell-escape synopsis
-	latexmk -pdf -jobname="dissertation_$(DESCR)" -c dissertation
-	rm -f dissertation_$(DESCR).bbl
+	latexmk -pdf -jobname="thesis_$(DESCR)" -c thesis
+	rm -f thesis_$(DESCR).bbl
 	latexmk -pdf -jobname="synopsis_$(DESCR)" -c synopsis
 	rm -f synopsis_$(DESCR).bbl
 	#
 	$(eval DESCR = xelatex_bibtex_draft)
-	latexmk -xelatex -jobname="dissertation_$(DESCR)" -r $(RCFILE) -silent -shell-escape dissertation
+	latexmk -xelatex -jobname="thesis_$(DESCR)" -r $(RCFILE) -silent -shell-escape thesis
 	latexmk -xelatex -jobname="synopsis_$(DESCR)" -r $(RCFILE) -silent -shell-escape synopsis
-	latexmk -xelatex -jobname="dissertation_$(DESCR)" -c dissertation
-	rm -f dissertation_$(DESCR).bbl
-	rm -f dissertation_$(DESCR).xdv
+	latexmk -xelatex -jobname="thesis_$(DESCR)" -c thesis
+	rm -f thesis_$(DESCR).bbl
+	rm -f thesis_$(DESCR).xdv
 	latexmk -xelatex -jobname="synopsis_$(DESCR)" -c synopsis
 	rm -f synopsis_$(DESCR).bbl
 	rm -f synopsis_$(DESCR).xdv
 	#
 	$(eval DESCR = lualatex_bibtex_draft)
-	latexmk -lualatex -jobname="dissertation_$(DESCR)" -r $(RCFILE) -silent -shell-escape dissertation
+	latexmk -lualatex -jobname="thesis_$(DESCR)" -r $(RCFILE) -silent -shell-escape thesis
 	latexmk -lualatex -jobname="synopsis_$(DESCR)" -r $(RCFILE) -silent -shell-escape synopsis
-	latexmk -lualatex -jobname="dissertation_$(DESCR)" -c dissertation
-	rm -f dissertation_$(DESCR).bbl
+	latexmk -lualatex -jobname="thesis_$(DESCR)" -c thesis
+	rm -f thesis_$(DESCR).bbl
 	latexmk -lualatex -jobname="synopsis_$(DESCR)" -c synopsis
 	rm -f synopsis_$(DESCR).bbl
 	#
 	$(eval RCFILE = nodraft_pscyr_latexmkrc)
 	$(eval DESCR = pdflatex_pscyr)
-	latexmk -pdf -jobname="dissertation_$(DESCR)" -r $(RCFILE) -silent -shell-escape dissertation
+	latexmk -pdf -jobname="thesis_$(DESCR)" -r $(RCFILE) -silent -shell-escape thesis
 	latexmk -pdf -jobname="synopsis_$(DESCR)" -r $(RCFILE) -silent -shell-escape synopsis
-	latexmk -pdf -jobname="dissertation_$(DESCR)" -c dissertation
-	rm -f dissertation_$(DESCR).bbl
+	latexmk -pdf -jobname="thesis_$(DESCR)" -c thesis
+	rm -f thesis_$(DESCR).bbl
 	latexmk -pdf -jobname="synopsis_$(DESCR)" -c synopsis
 	rm -f synopsis_$(DESCR).bbl
-	rm -f dissertation_$(DESCR).run.xml
+	rm -f thesis_$(DESCR).run.xml
 	rm -f synopsis_$(DESCR).run.xml
 	#
 	$(eval RCFILE = nodraft_nopscyr_latexmkrc)
 	$(eval DESCR = pdflatex)
-	latexmk -pdf -jobname="dissertation_$(DESCR)" -r $(RCFILE) -silent -shell-escape dissertation
+	latexmk -pdf -jobname="thesis_$(DESCR)" -r $(RCFILE) -silent -shell-escape thesis
 	latexmk -pdf -jobname="synopsis_$(DESCR)" -r $(RCFILE) -silent -shell-escape synopsis
-	latexmk -pdf -jobname="dissertation_$(DESCR)" -c dissertation
-	rm -f dissertation_$(DESCR).bbl
+	latexmk -pdf -jobname="thesis_$(DESCR)" -c thesis
+	rm -f thesis_$(DESCR).bbl
 	latexmk -pdf -jobname="synopsis_$(DESCR)" -c synopsis
 	rm -f synopsis_$(DESCR).bbl
-	rm -f dissertation_$(DESCR).run.xml
+	rm -f thesis_$(DESCR).run.xml
 	rm -f synopsis_$(DESCR).run.xml
 	#
 	$(eval DESCR = xelatex)
-	latexmk -xelatex -jobname="dissertation_$(DESCR)" -r $(RCFILE) -silent -shell-escape dissertation
+	latexmk -xelatex -jobname="thesis_$(DESCR)" -r $(RCFILE) -silent -shell-escape thesis
 	latexmk -xelatex -jobname="synopsis_$(DESCR)" -r $(RCFILE) -silent -shell-escape synopsis
-	latexmk -xelatex -jobname="dissertation_$(DESCR)" -c dissertation
-	rm -f dissertation_$(DESCR).bbl
-	rm -f dissertation_$(DESCR).xdv
+	latexmk -xelatex -jobname="thesis_$(DESCR)" -c thesis
+	rm -f thesis_$(DESCR).bbl
+	rm -f thesis_$(DESCR).xdv
 	latexmk -xelatex -jobname="synopsis_$(DESCR)" -c synopsis
 	rm -f synopsis_$(DESCR).bbl
 	rm -f synopsis_$(DESCR).xdv
-	rm -f dissertation_$(DESCR).run.xml
+	rm -f thesis_$(DESCR).run.xml
 	rm -f synopsis_$(DESCR).run.xml
 	#
 	$(eval DESCR = lualatex)
-	latexmk -lualatex -jobname="dissertation_$(DESCR)" -r $(RCFILE) -silent -shell-escape dissertation
+	latexmk -lualatex -jobname="thesis_$(DESCR)" -r $(RCFILE) -silent -shell-escape thesis
 	latexmk -lualatex -jobname="synopsis_$(DESCR)" -r $(RCFILE) -silent -shell-escape synopsis
-	latexmk -lualatex -jobname="dissertation_$(DESCR)" -c dissertation
-	rm -f dissertation_$(DESCR).bbl
+	latexmk -lualatex -jobname="thesis_$(DESCR)" -c thesis
+	rm -f thesis_$(DESCR).bbl
 	latexmk -lualatex -jobname="synopsis_$(DESCR)" -c synopsis
 	rm -f synopsis_$(DESCR).bbl
-	rm -f dissertation_$(DESCR).run.xml
+	rm -f thesis_$(DESCR).run.xml
 	rm -f synopsis_$(DESCR).run.xml
 	#
 	$(eval RCFILE = draft_pscyr_latexmkrc)
 	$(eval DESCR = pdflatex_pscyr_draft)
-	latexmk -pdf -jobname="dissertation_$(DESCR)" -r $(RCFILE) -silent -shell-escape dissertation
+	latexmk -pdf -jobname="thesis_$(DESCR)" -r $(RCFILE) -silent -shell-escape thesis
 	latexmk -pdf -jobname="synopsis_$(DESCR)" -r $(RCFILE) -silent -shell-escape synopsis
-	latexmk -pdf -jobname="dissertation_$(DESCR)" -c dissertation
-	rm -f dissertation_$(DESCR).bbl
+	latexmk -pdf -jobname="thesis_$(DESCR)" -c thesis
+	rm -f thesis_$(DESCR).bbl
 	latexmk -pdf -jobname="synopsis_$(DESCR)" -c synopsis
 	rm -f synopsis_$(DESCR).bbl
-	rm -f dissertation_$(DESCR).run.xml
+	rm -f thesis_$(DESCR).run.xml
 	rm -f synopsis_$(DESCR).run.xml
 	#
 	$(eval RCFILE = draft_nopscyr_latexmkrc)
 	$(eval DESCR = pdflatex_draft)
-	latexmk -pdf -jobname="dissertation_$(DESCR)" -r $(RCFILE) -silent -shell-escape dissertation
+	latexmk -pdf -jobname="thesis_$(DESCR)" -r $(RCFILE) -silent -shell-escape thesis
 	latexmk -pdf -jobname="synopsis_$(DESCR)" -r $(RCFILE) -silent -shell-escape synopsis
-	latexmk -pdf -jobname="dissertation_$(DESCR)" -c dissertation
-	rm -f dissertation_$(DESCR).bbl
+	latexmk -pdf -jobname="thesis_$(DESCR)" -c thesis
+	rm -f thesis_$(DESCR).bbl
 	latexmk -pdf -jobname="synopsis_$(DESCR)" -c synopsis
 	rm -f synopsis_$(DESCR).bbl
-	rm -f dissertation_$(DESCR).run.xml
+	rm -f thesis_$(DESCR).run.xml
 	rm -f synopsis_$(DESCR).run.xml
 	#
 	$(eval DESCR = xelatex_draft)
-	latexmk -xelatex -jobname="dissertation_$(DESCR)" -r $(RCFILE) -silent -shell-escape dissertation
+	latexmk -xelatex -jobname="thesis_$(DESCR)" -r $(RCFILE) -silent -shell-escape thesis
 	latexmk -xelatex -jobname="synopsis_$(DESCR)" -r $(RCFILE) -silent -shell-escape synopsis
-	latexmk -xelatex -jobname="dissertation_$(DESCR)" -c dissertation
-	rm -f dissertation_$(DESCR).bbl
-	rm -f dissertation_$(DESCR).xdv
+	latexmk -xelatex -jobname="thesis_$(DESCR)" -c thesis
+	rm -f thesis_$(DESCR).bbl
+	rm -f thesis_$(DESCR).xdv
 	latexmk -xelatex -jobname="synopsis_$(DESCR)" -c synopsis
 	rm -f synopsis_$(DESCR).bbl
 	rm -f synopsis_$(DESCR).xdv
-	rm -f dissertation_$(DESCR).run.xml
+	rm -f thesis_$(DESCR).run.xml
 	rm -f synopsis_$(DESCR).run.xml
 	#
 	$(eval DESCR = lualatex_draft)
-	latexmk -lualatex -jobname="dissertation_$(DESCR)" -r $(RCFILE) -silent -shell-escape dissertation
+	latexmk -lualatex -jobname="thesis_$(DESCR)" -r $(RCFILE) -silent -shell-escape thesis
 	latexmk -lualatex -jobname="synopsis_$(DESCR)" -r $(RCFILE) -silent -shell-escape synopsis
-	latexmk -lualatex -jobname="dissertation_$(DESCR)" -c dissertation
-	rm -f dissertation_$(DESCR).bbl
+	latexmk -lualatex -jobname="thesis_$(DESCR)" -c thesis
+	rm -f thesis_$(DESCR).bbl
 	latexmk -lualatex -jobname="synopsis_$(DESCR)" -c synopsis
 	rm -f synopsis_$(DESCR).bbl
-	rm -f dissertation_$(DESCR).run.xml
+	rm -f thesis_$(DESCR).run.xml
 	rm -f synopsis_$(DESCR).run.xml
 
 clean:
-	#	$(MAKE) clean -C Dissertation
-	latexmk -C dissertation
-	rm -f dissertation.bbl
+	#	$(MAKE) clean -C Thesis
+	latexmk -C thesis
+	rm -f thesis.bbl
 	#	$(MAKE) clean -C Synopsis
 	latexmk -C synopsis
 	rm -f synopsis.bbl
 	$(MAKE) clean -C Presentation
 
 distclean:
-	$(MAKE) distclean -C Dissertation
+	$(MAKE) distclean -C Thesis
 	$(MAKE) distclean -C Synopsis
 	$(MAKE) distclean -C Presentation
 	## Core latex/pdflatex auxiliary files:
@@ -412,5 +412,5 @@ distclean:
 	rm -f *.run.xml
 
 release: all
-	git add dissertation.pdf
+	git add thesis.pdf
 	git add synopsis.pdf

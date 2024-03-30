@@ -65,8 +65,8 @@ for author in authors:
 print("Total cites: ",len(cites))
 import sys,os,shutil,glob,subprocess
 path = os.getcwd()
-path_fig = os.path.join(path, '../Dissertation')
-print("Dissertation path: ",path_fig)
+path_fig = os.path.join(path, '../Thesis')
+print("Thesis path: ",path_fig)
 os.chdir(path_fig)
 files = []
 for fname in glob.iglob('*.tex'):
